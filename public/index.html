@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chat System</title>
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <h1>Live chaaat</h1>
+  
+  <ul id="messages"></ul>
+  
+  <form id="chat-form">
+    <input id="chat-input" autocomplete="off" />
+    <button>Send</button>
+  </form>
+  
+  <script>
+    const socket = io();
+    const messages = document.getElementById('messages');
+    const form = document.getElementById('chat-form');
+    const input = document.getElementById('chat-input');
+    
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (input.value) {
+        socket.emit('chat message', input.value);
+        input.value = '';
+      }
+    });
+    
+    socket.on('chat message', (msg) => {
+      const li = document.createElement('li');
+      li.textContent = msg;
+      messages.appendChild(li);
+    });
+  </script>
+</body>
+</html>
